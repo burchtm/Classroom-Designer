@@ -1,0 +1,59 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, minimum-scale=1.0">
+    <title>Project name</title>
+
+    <!-- Font Awesome has a bunch of handy icons that are easy to use (optional) -->
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/font-awesome/4.6.0/css/font-awesome.min.css">
+
+    <!-- jQuery JS -->
+    <script src="/static/js/jquery-2.2.3.min.js"></script>
+    <link rel="stylesheet" href="https://fonts.googleapis.com/icon?family=Material+Icons">
+    <script src="https://code.getmdl.io/1.2.1/material.min.js"></script>
+    <link rel="stylesheet" href="https://code.getmdl.io/1.3.0/material.deep_purple-indigo.min.css"/>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/dialog-polyfill/0.4.4/dialog-polyfill.css">
+    <script type="text/javascript"
+            src="https://cdnjs.cloudflare.com/ajax/libs/dialog-polyfill/0.4.4/dialog-polyfill.js"></script>
+
+    <script async defer
+            src="https://maps.googleapis.com/maps/api/js?key=AIzaSyA3vmnzLodVlnS0tIbty8tduEaKs4TF-BY&callback=initMap">
+    </script>
+
+    <!-- Custom JS -->
+    <script src="/static/js/main.js"></script>
+
+    <!-- Custom CSS -->
+    <link rel="stylesheet" href="/static/css/login-style.css">
+
+</head>
+
+<body>
+<div class="mdl-layout mdl-js-layout mdl-layout--fixed-header">
+    <header class="mdl-layout__header">
+        <div class="mdl-layout__header-row">
+            <span class="mdl-layout-title">Classroom Designer</span>
+            <div class="mdl-layout-spacer"></div>
+            <nav class="mdl-navigation mdl-layout--large-screen-only">
+                <a class="mdl-navigation__link" href="{{ login_url }}">Sign In</a>
+            </nav>
+        </div>
+    </header>
+    <div class="mdl-layout__drawer mdl-layout--small-screen-only">
+        <span class="mdl-layout-title">Classroom Designer</span>
+        <nav class="mdl-navigation">
+            <a class="mdl-navigation__link" href="{{ login_url }}">Sign In</a>
+        </nav>
+    </div>
+    <main class="container mdl-layout__content">
+        <img src="static/images/Classroom.jpg" style="position: absolute; width: 100%; height: 100%"/>
+    </main>
+    <footer id="footer" class="mdl-mini-footer">
+        <div id="footer_content" class="mdl-mini-footer__middle-section">
+            <h4>Design your classrooms in a flash!</h4>
+        </div>
+    </footer>
+</div>
+</body>
+</html>

@@ -1,0 +1,352 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="initial-scale=1.0001, minimum-scale=1.0001, maximum-scale=1.0001, user-scalable=no">
+    <title>Travel Companion</title>
+
+    <!-- Font Awesome has a bunch of handy icons that are easy to use (optional) -->
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/font-awesome/4.6.0/css/font-awesome.min.css">
+
+    <!-- jQuery JS -->
+    <script src="/static/js/jquery-2.2.3.min.js"></script>
+    <link rel="stylesheet" href="https://fonts.googleapis.com/icon?family=Material+Icons">
+    <script src="https://code.getmdl.io/1.2.1/material.min.js"></script>
+    <link rel="stylesheet" href="https://code.getmdl.io/1.2.1/material.teal-indigo.min.css"/>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/dialog-polyfill/0.4.4/dialog-polyfill.css">
+    <script type="text/javascript"
+            src="https://cdnjs.cloudflare.com/ajax/libs/dialog-polyfill/0.4.4/dialog-polyfill.js"></script>
+
+    <!-- From for Date time pickers https://github.com/T00rk/bootstrap-material-datetimepicker -->
+    <!-- License: https://github.com/T00rk/bootstrap-material-datetimepicker/blob/gh-pages/LICENSE.md -->
+    <!-- The MIT License (MIT)
+        Copyright (c) 2015 Romain America
+        Permission is hereby granted, free of charge, to any person obtaining a copy of this software and associated
+        documentation files (the "Software"), to deal in the Software without restriction, including without limitation
+        the rights to use, copy, modify, merge, publish, distribute, sublicense, and/or sell copies of the Software, and
+        to permit persons to whom the Software is furnished to do so, subject to the following conditions:
+        The above copyright notice and this permission notice shall be included in all copies or substantial portions of
+        the Software.
+        THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR IMPLIED, INCLUDING BUT NOT LIMITED TO
+        THE WARRANTIES OF MERCHANTABILITY, FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
+        AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER LIABILITY, WHETHER IN AN ACTION OF
+        CONTRACT, TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER
+        DEALINGS IN THE SOFTWARE. -->
+    <!-- Used with modifications -->
+    <link rel="stylesheet" href="/static/css/bootstrap-material-datetimepicker.css"/>
+    <script type="text/javascript" src="http://momentjs.com/downloads/moment-with-locales.min.js"></script>
+    <script type="text/javascript" src="/static/js/bootstrap-material-datetimepicker.js"></script>
+
+    <!-- Custom JS -->
+    <script src="/static/js/main.js"></script>
+
+    <!-- Custom CSS -->
+    <link rel="stylesheet" href="/static/css/style.css">
+
+    <script async defer
+            src="https://maps.googleapis.com/maps/api/js?key=AIzaSyA3vmnzLodVlnS0tIbty8tduEaKs4TF-BY&callback=initMap">
+    </script>
+
+</head>
+
+<body>
+{% block header %}
+<div class="mdl-layout mdl-js-layout mdl-layout--fixed-header">
+    <header class="mdl-layout__header">
+        <div class="mdl-layout__header-row">
+            <span id="title" class="mdl-layout-title">Travel Companion</span>
+            <div class="mdl-layout-spacer"></div>
+            <nav class="mdl-navigation mdl-layout--large-screen-only">
+                <a name="save-route-link" class="mdl-navigation__link save-route-btn">Save Route</a>
+                <a class="mdl-navigation__link my-routes-btn">My Routes</a>
+                <a class="mdl-navigation__link notification-btn">Create Notification</a>
+                <a class="mdl-navigation__link my-notifications-btn">My Notifications</a>
+                <a class="mdl-navigation__link" href="{{ logout_url }}">Sign Out</a>
+            </nav>
+        </div>
+    </header>
+    <div class="mdl-layout__drawer mdl-layout--small-screen-only">
+        <span class="mdl-layout-title">Travel Companion</span>
+        <nav class="mdl-navigation">
+            <a name="save-route-link" class="mdl-navigation__link save-route-btn">Save Route</a>
+            <a class="mdl-navigation__link my-routes-btn">My Routes</a>
+            <a class="mdl-navigation__link notification-btn">Create Notification</a>
+            <a class="mdl-navigation__link my-notifications-btn">My Notifications</a>
+            <a class="mdl-navigation__link" href="{{ logout_url }}">Sign Out</a>
+        </nav>
+    </div>
+    {% endblock %}
+    <main class="container mdl-layout__content">
+        {% block content %}{% endblock %}
+    </main>
+    {% block footer %}
+    <footer id="footer" class="mdl-mini-footer">
+        <div id="footer_content" class="mdl-mini-footer__middle-section">
+            <ul class="mdl-mini-footer__link-list center">
+                <a class="create-route-btn">
+                    <li><i class="fa fa-file-text-o" aria-hidden="true"></i><br/><span id="create-route-text">Create Route</span></li>
+                </a>
+                <a class="edit-route-btn">
+                    <li><i class="fa fa-pencil edit-route-btn" aria-hidden="true"></i><br/><span id="edit-route-text">Edit Route</span></li>
+                </a>
+                <a class="recent-btn">
+                    <li><i class="fa fa-clock-o" aria-hidden="true"></i><br/><span id="recent-route-text">Recent Routes</span></li>
+                </a>
+            </ul>
+        </div>
+    </footer>
+    {% endblock %}
+</div>
+<div class="fab-width-container container">
+    {% block fab %}{% endblock %}
+</div>
+{% block dialogs %}
+<dialog id='edit-route-dialog' class="mdl-dialog">
+    <h4 class="mdl-dialog__title" id="edit-route-title">Create Route</h4>
+    <form id="create-route-form" action="/edit-route" method="POST">
+    	<input class="hidden" id="edit-route-entity-key" name="edit-route-entity-key">
+        <div class="mdl-dialog__content">
+            <h5 id="destinations_label">Destinations</h5>
+            <h5 id="ordered_label">Ordered?</h5>
+            <br/>
+            <br/>
+            <div id="stop1-field" class="mdl-textfield mdl-js-textfield mdl-textfield--floating-label">
+                <input id="stop1" class="mdl-textfield__input" type="text" name="stop1">
+                <label class="mdl-textfield__label" for="stop1">Stop 1</label>
+            </div>
+            <label id="stop1-label-checkbox" class="mdl-checkbox mdl-js-checkbox route-ordered" for="stop1-checkbox">
+                <input type="checkbox" id="stop1-checkbox" class="mdl-checkbox__input" name="stop1-checkbox" checked>
+            </label>
+            <br/>
+            <div id="stop2-field" class="mdl-textfield mdl-js-textfield mdl-textfield--floating-label">
+                <input id="stop2" class="mdl-textfield__input" type="text" name="stop2">
+                <label class="mdl-textfield__label" for="stop2">Stop 2</label>
+            </div>
+            <label id="stop2-label-checkbox" class="mdl-checkbox mdl-js-checkbox route-ordered" for="stop2-checkbox">
+                <input type="checkbox" id="stop2-checkbox" class="mdl-checkbox__input" name="stop2-checkbox" checked>
+            </label>
+            <br/>
+            <div id="stop3-field" class="mdl-textfield mdl-js-textfield mdl-textfield--floating-label">
+                <input id="stop3" class="mdl-textfield__input" type="text" name="stop3">
+                <label class="mdl-textfield__label" for="stop3">Stop 3</label>
+            </div>
+            <label id="stop3-label-checkbox" class="mdl-checkbox mdl-js-checkbox route-ordered" for="stop3-checkbox">
+                <input type="checkbox" id="stop3-checkbox" class="mdl-checkbox__input" name="stop3-checkbox" checked>
+            </label>
+            <br/>
+            <div id="stop4-field" class="mdl-textfield mdl-js-textfield mdl-textfield--floating-label">
+                <input id="stop4" class="mdl-textfield__input" type="text" name="stop4">
+                <label class="mdl-textfield__label" for="stop4">Stop 4</label>
+            </div>
+            <label id="stop4-label-checkbox" class="mdl-checkbox mdl-js-checkbox route-ordered" for="stop4-checkbox">
+                <input type="checkbox" id="stop4-checkbox" class="mdl-checkbox__input" name="stop4-checkbox" checked>
+            </label>
+            <br/>
+            <div id="stop5-field" class="mdl-textfield mdl-js-textfield mdl-textfield--floating-label">
+                <input id="stop5" class="mdl-textfield__input" type="text" name="stop5">
+                <label class="mdl-textfield__label" for="stop5">Stop 5</label>
+            </div>
+            <label id="stop5-label-checkbox" class="mdl-checkbox mdl-js-checkbox route-ordered" for="stop5-checkbox">
+                <input type="checkbox" id="stop5-checkbox" class="mdl-checkbox__input" name="stop5-checkbox" checked>
+            </label>
+            <p id="create-error-msg" class="hidden" style="color: red;">Travel Companion Only Supports 3 Unordered Stops! :)</p>
+        </div>
+        <div class="mdl-dialog__actions">
+            <button id="create-route-button" type="button"
+                    class="mdl-button mdl-js-button mdl-button--raised mdl-button--colored">Create Route
+            </button>
+            <button type="button" class="mdl-button mdl-js-button mdl-button--raised close-edit-route-dialog">
+                Cancel
+            </button>
+        </div>
+    </form>
+</dialog>
+<dialog id='recent-dialog' class="mdl-dialog">
+    <h4 class="mdl-dialog__title">Recent Routes</h4>
+    <div class="mdl-dialog__content">
+        <ul class="demo-list-item mdl-list">
+            {% for route in recent_routes %}
+            <a href="/?route={{route.key.urlsafe()}}" class="recent-route-link">
+                <li class="mdl-list__item recent-route">
+                    <span class="mdl-list__item-primary-content">
+                      {{ route.name }}
+                    </span>
+                </li>
+            </a>
+            <hr/>
+            {% endfor %}
+        </ul>
+    </div>
+    <div class="mdl-dialog__actions">
+        <button id="recent-close-btn" type="button"
+                class="mdl-button mdl-js-button mdl-button--raised close-recent-dialog">
+            Cancel
+        </button>
+    </div>
+</dialog>
+<dialog id='save-route-dialog' class="mdl-dialog">
+    <h4 class="mdl-dialog__title">Save Route</h4>
+    <form id="save-route-form" action="/save" method="POST">
+        <input id="save-entity-key" class="hidden" name="save_entity_key">
+        <div class="mdl-dialog__content">
+            <div id="name-field" class="mdl-textfield mdl-js-textfield mdl-textfield--floating-label">
+                <input id="save-route-name" class="mdl-textfield__input" type="text" name="save-route-name">
+                <label id="name-label" class="mdl-textfield__label" for="save-route-name">Name</label>
+            </div>
+            <div class="scheduled-picker">
+                <div id="route-time-field"
+                     class="mdl-textfield mdl-js-textfield mdl-textfield--floating-label">
+                    <input id="route-time" class="mdl-textfield__input" type="text" name="route-time">
+                    <label id="route-time-label" class="mdl-textfield__label" for="route-time">Route
+                        Time</label>
+                </div>
+            </div>
+			<p id="save-error-msg" class="hidden" style="color: red;">Fill Out All Fields!</p>
+        </div>
+        
+        <div class="mdl-dialog__actions">
+            <button id="save-route-button" type="button"
+                    class="mdl-button mdl-js-button mdl-button--raised mdl-button--colored">Save
+            </button>
+            <button type="button" class="mdl-button mdl-js-button mdl-button--raised close-save-route-dialog">
+                Cancel
+            </button>
+        </div>
+    </form>
+</dialog>
+<dialog id='my-routes-dialog' class="mdl-dialog">
+    <h4 class="mdl-dialog__title">My Routes</h4>
+    <div class="mdl-dialog__content">
+        <div id="saved-routes-list" class="mdl-list">
+            {% for route in my_routes %}
+            <div class="mdl-list__item saved-route">
+                <span class="mdl-list__item-primary-content">
+                    <span class="hidden my_route_entity_key">{{ route.key.urlsafe() }}</span>
+                    <span class="my_route_name">{{ route.name }}</span>
+                </span>
+                <button type="button" class="mdl-button mdl-js-button mdl-button--icon edit-saved-route">
+                    <a class="mdl-list__item-secondary-action route-edit">
+                        <span class="hidden my_route_entity_key">{{ route.key.urlsafe() }}</span>
+                        <span class="hidden my_route_time_hour">
+                            {% if route.start_time.hour == 0%}
+                                {{route.start_time.hour + 1}}
+                            {% elif route.start_time.hour > 12%}
+                                {{route.start_time.hour - 12}}
+                            {% else %}
+                                {{route.start_time.hour}}
+                            {% endif %}
+                        </span>
+                        <span class="hidden my_route_time_minute">{{ route.start_time.minute}}</span>
+                        <span class="hidden my_route_time_half">{% if route.start_time.hour > 11%}PM{% else %}AM{% endif %}</span>
+                        <span class=" hidden my_route_name">{{ route.name }}</span>
+                        <i class="fa fa-pencil" aria-hidden="true"></i>
+                    </a>
+                </button>
+                <button type="button" class="mdl-button mdl-js-button mdl-button--icon delete-saved-route">
+                    <span class="mdl-list__item-secondary-action route-delete"><span class="hidden my_route_entity_key">{{ route.key.urlsafe() }}</span><i
+                            class="fa fa-trash" aria-hidden="true"></i></span>
+                </button>
+            </div>
+            <hr/>
+            {% endfor %}
+        </div>
+    </div>
+    <div class="mdl-dialog__actions">
+        <button type="button" class="mdl-button mdl-js-button mdl-button--raised close-my-routes-dialog">
+            Close
+        </button>
+    </div>
+</dialog>
+<dialog id='confirmation-dialog' class="mdl-dialog">
+    <h4 class="mdl-dialog__title">Are You Sure?</h4>
+    <div class="mdl-dialog__content">
+        <div class="hidden to_delete_entity_key"></div>
+        <div class="hidden current_entity_key">{{entity_key}}</div>
+        <p>Are you sure you want to delete this route? This can not be undone!</p>
+    </div>
+    <div class="mdl-dialog__actions">
+        <button type="button" class="mdl-button mdl-js-button mdl-button--raised mdl-button--colored confirm-delete">I'm
+            Sure!
+        </button>
+        <button type="button" class="mdl-button mdl-js-button mdl-button--raised close-confirmation-dialog">
+            Cancel
+        </button>
+    </div>
+    </form>
+</dialog>
+<dialog id='notification-dialog' class="mdl-dialog">
+    <h4 class="mdl-dialog__title">Create Notification</h4>
+    <form id="create-notification-form" action="/create-notification" method="POST">
+        <div class="mdl-dialog__content">
+            <input type="hidden" name="notification-route-entity-key" id="notification-route-entity-key" value="{{ entity_key }}"/>
+            <input type="hidden" name="notification-type" id="notification-type"/>
+            <div id="type-buttons">
+                <button id="notification-email-toggle" type="button"
+                        class="mdl-button mdl-js-button mdl-button--raised mdl-button--colored">
+                    Email
+                </button>
+                <button id="notification-text-toggle" type="button" class="mdl-button mdl-js-button mdl-button--raised">
+                    Text
+                </button>
+            </div>
+            <br/>
+            <div id="notification-contact-field" class="mdl-textfield mdl-js-textfield mdl-textfield--floating-label">
+                <input id="notification-contact" class="mdl-textfield__input" type="text" name="notification-contact">
+                <label id="notification-contact-label" class="mdl-textfield__label" for="notification-contact">Email Address</label>
+            </div>
+            <br/>
+            <span class="mdl-switch__label daily-notification-switch-label">Daily?</span>
+            <label class="mdl-switch mdl-js-switch mdl-js-ripple-effect daily-notification-switch" for="daily-notification-switch">
+                <input type="checkbox" id="daily-notification-switch" class="mdl-switch__input" name="daily-notification">
+            </label>
+            <br/>
+            <div id="notification-hour-field" class="mdl-textfield mdl-js-textfield mdl-textfield--floating-label">
+                <input id="notification-hour" class="mdl-textfield__input" type="text" name="notification-hour">
+                <label id="notification-hour-label" class="mdl-textfield__label" for="notification-hour">Hours Before</label>
+            </div>
+            <div id="notification-minute-field" class="mdl-textfield mdl-js-textfield mdl-textfield--floating-label">
+                <input id="notification-minute" class="mdl-textfield__input" type="text" name="notification-minute">
+                <label id="notification-minute-label" class="mdl-textfield__label" for="notification-minute">Minutes Before</label>
+            </div>
+            <p id="notification-error-msg" class="hidden" style="color: red;">Fill Out All Fields!</p>
+        </div>
+        <div class="mdl-dialog__actions" id="notification-action-buttons">
+            <button id="create-notification-button" type="button" class="mdl-button mdl-js-button mdl-button--raised mdl-button--colored">Save Notification</button>
+            <button type="button" class="mdl-button mdl-js-button mdl-button--raised close-notification-dialog">
+                Cancel
+            </button>
+        </div>
+    </form>
+</dialog>
+<dialog id='my-notifications-dialog' class="mdl-dialog">
+    <h4 class="mdl-dialog__title">My Notifications</h4>
+    <div class="mdl-dialog__content">
+        <div id="notifications-list" class="mdl-list">
+            {% for notification in my_notifications %}
+            <div class="mdl-list__item notification">
+                <span class="mdl-list__item-primary-content">
+                    <span class="hidden my_notification_entity_key">{{ notification.key.urlsafe() }}</span>
+                    <span class="my_notification_name">{{ notification.key.parent().get().name }} - {% if notification.time.hour == 0%}{{notification.time.hour + 1}}{% elif notification.time.hour > 12%}{{notification.time.hour - 12}}{% else %}{{notification.time.hour}}{% endif %}:{% if notification.time.minute == 0 %}00{%else%}{{notification.time.minute}}{%endif%}{% if notification.time.hour > 11%}PM{% else %}AM{% endif %}</span>
+                </span>
+                <button type="button" class="mdl-button mdl-js-button mdl-button--icon delete-notification">
+                    <span class="mdl-list__item-secondary-action notification-delete">
+                        <span class="hidden my_notification_entity_key">{{ notification.key.urlsafe() }}</span>
+                        <span class="hidden current_entity_key">{{entity_key}}</span>
+                        <i class="fa fa-trash" aria-hidden="true"></i></span>
+                </button>
+            </div>
+            <hr/>
+            {% endfor %}
+        </div>
+    </div>
+    <div class="mdl-dialog__actions">
+        <button type="button" class="mdl-button mdl-js-button mdl-button--raised close-my-notifications-btn">
+            Close
+        </button>
+    </div>
+</dialog>
+{% endblock %}
+</body>
+
+</html>

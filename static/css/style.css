@@ -1,0 +1,296 @@
+#map {
+    height: 100%;
+    min-height: 100%;
+    max-height: 100%;
+    position: relative !important;
+}
+
+.save-route-btn, #title {
+    cursor: pointer;
+    cursor: hand;
+}
+
+#footer_content {
+    text-align: center;
+    margin-left: auto;
+    margin-right: auto;
+    cursor: pointer;
+    cursor: hand;
+}
+
+#footer {
+    padding: 5px 5px;
+}
+
+.fa-trash {
+    color: red;
+}
+
+.route-ordered {
+    width: auto;
+    margin-left: 70px;
+}
+
+.route-delete {
+    padding-right: 15px;
+}
+
+#destinations_label {
+    display: inline-block;
+}
+
+#ordered_label {
+    display: inline-block;
+    float: right;
+}
+
+#text-toggle, #email-toggle, #notification-text-toggle, #notification-email-toggle {
+    display: inline-block;
+}
+
+#email-toggle, #notification-email-toggle {
+    margin-right: 15px;
+}
+
+#recent-close-btn, #type-buttons {
+    text-align: center;
+}
+
+.mdl-mini-footer--link-list li, .mdl-mini-footer__link-list li {
+    margin: 0px 16px;
+    line-height: 24px;
+}
+
+/* Always set the map height explicitly to define the size of the div
+       * element that contains the map. */
+#map {
+    height: 100%;
+}
+
+/* Optional: Makes the sample page fill the window. */
+html, body {
+    height: 100%;
+    margin: 0;
+    padding: 0;
+}
+
+#floating-panel {
+    position: absolute;
+    top: 10px;
+    left: 25%;
+    z-index: 5;
+    background-color: #fff;
+    padding: 5px;
+    border: 1px solid #999;
+    text-align: center;
+    font-family: 'Roboto', 'sans-serif';
+    line-height: 30px;
+    padding-left: 10px;
+}
+
+#right-panel {
+    font-family: 'Roboto', 'sans-serif';
+    line-height: 30px;
+}
+
+#right-panel select, #right-panel input {
+    font-size: 15px;
+}
+
+#right-panel select {
+    width: 100%;
+}
+
+#right-panel i {
+    font-size: 12px;
+}
+
+#right-panel {
+    height: 100%;
+    float: right;
+    width: 390px;
+    overflow: auto;
+}
+
+#map {
+    margin-right: 390px;
+}
+
+#floating-panel {
+    background: #fff;
+    padding: 5px;
+    font-size: 14px;
+    font-family: Arial;
+    border: 1px solid #ccc;
+    box-shadow: 0 2px 2px rgba(33, 33, 33, 0.4);
+    display: none;
+}
+
+#directions_header {
+    position: fixed;
+    background-color: rgb(0, 150, 136);
+    width: 100%;
+    margin: 0px;
+    padding: 24px 0px;
+    z-index: -1;
+    color: white;
+    font-family: "Roboto", "Helvetica", "Arial", sans-serif;
+}
+
+#directions-panel {
+    position: relative;
+    top: 113px;
+    overflow: auto;
+    z-index: -2;
+}
+
+@media print {
+    #map {
+        height: 500px;
+        margin: 0;
+    }
+
+    #right-panel {
+        float: none;
+        width: auto;
+    }
+}
+
+.daily-notification-switch {
+    display: inline-block;
+    width: initial;
+    float: right;
+}
+
+.daily-notification-switch-label {
+    left: 0;
+    display: inline-block;
+}
+
+.dtp div.dtp-date, .dtp div.dtp-time {
+    background: rgb(0, 150, 136);
+}
+
+.dtp > .dtp-content > .dtp-date-view > header.dtp-header {
+    background: rgb(0, 128, 120);
+}
+
+.dtp .dtp-actual-meridien a.selected {
+    background: rgb(83, 109, 254);
+}
+
+.saved-route, .recent-route, .my-routes-btn, .notification-btn, .my-notifications-btn {
+    cursor: pointer;
+    cursor: hand;
+}
+
+#saved-routes-list, #notifications-list {
+    overflow: auto;
+}
+
+.recent-route-link, .my-route-link {
+    text-decoration: none;
+}
+
+#notification-action-buttons {
+    padding-left: 0;
+}
+
+#my-routes-dialog, #my-notifications-dialog {
+    width: 450px;
+}
+
+#notification-minute-field, #notification-hour-field {
+    width: 110px;
+}
+
+#confirmation-dialog {
+    width: 340px;
+}
+
+#recent-dialog {
+    width: 500px;
+}
+
+#edit-route-dialog {
+    width: 500px;
+}
+
+#my-routes-dialog, #my-notifications-dialog {
+    width: 300px;
+    height: auto;
+    max-height: 75%;
+    overflow: auto;
+}
+
+@media only screen and (max-width: 499px) {
+    #map {
+        display: none;
+    }
+
+    #notification-dialog {
+        width: 325px;
+        height: 450px;
+        overflow: auto;
+    }
+
+    div#notification-contact-field {
+        width: 100%;
+    }
+
+    div#notification-hour-field {
+        width: 125px;
+    }
+
+    div#notification-minute-field {
+        width: 125px;
+    }
+
+    #directions_header {
+        line-height: .5;
+    }
+
+    #directions-panel {
+        top: 68px;
+    }
+
+    #create-route-text, #recent-route-text, #edit-route-text {
+        display: none;
+    }
+
+    #my-routes-dialog, #my-notifications-dialog {
+        width: 300px;
+        height: 500px;
+        overflow: auto;
+    }
+
+    #edit-route-dialog {
+        width: 300px;
+        height: 500px;
+        overflow: auto;
+    }
+
+    #recent-dialog {
+        width: 300px;
+        height: 500px;
+        overflow: auto;
+    }
+
+    .mdl-textfield {
+        width: 150px;
+    }
+
+    #directions_header {
+        width: 100%;
+        left: 0px;
+    }
+
+    #directions-panel > div {
+        width: 75%;
+        margin: auto;
+    }
+
+    #right-panel {
+        width: 375px;
+    }
+}
