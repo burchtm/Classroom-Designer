@@ -2,8 +2,9 @@ from google.appengine.ext import ndb
 from google.appengine.ext.ndb import msgprop
 from protorpc.messages import Enum
 
+#TODO UPDATE!
 class Route(ndb.Model):
-    """ 
+    """
          The Route Entity will be the essential starting place for the web app.
          The Route will belong to a user and will have different types inclucing:
          Recent, Saved, Both Recent and Saved, as well as Daily or Not
@@ -14,7 +15,7 @@ class Route(ndb.Model):
     daily = ndb.IntegerProperty()
     start_time = ndb.DateTimeProperty()
     last_touch_date_time = ndb.DateTimeProperty(auto_now=True)
-    
+
 class Stop(ndb.Model):
     """
         The Stop Entity will be a destination, belonging to a Route Entity.
@@ -28,7 +29,7 @@ class Stop(ndb.Model):
 #     city = ndb.StringProperty()
 #     state = ndb.StringProperty()
 #     zip = ndb.StringProperty()
-    
+
 class Notification(ndb.Model):
     """
         The Notification Entity will be used to send messages between two users
