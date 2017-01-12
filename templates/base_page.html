@@ -17,6 +17,8 @@
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/dialog-polyfill/0.4.4/dialog-polyfill.css">
     <script type="text/javascript"
             src="https://cdnjs.cloudflare.com/ajax/libs/dialog-polyfill/0.4.4/dialog-polyfill.js"></script>
+    <link rel="stylesheet" href="static/css/material.components.ext.min.css">
+    <script src="/static/js/material.components.ext.min.js"></script>
 
     <!-- From for Date time pickers https://github.com/T00rk/bootstrap-material-datetimepicker -->
     <!-- License: https://github.com/T00rk/bootstrap-material-datetimepicker/blob/gh-pages/LICENSE.md -->
@@ -43,11 +45,6 @@
 
     <!-- Custom CSS -->
     <link rel="stylesheet" href="/static/css/style.css">
-
-    <script async defer
-            src="https://maps.googleapis.com/maps/api/js?key=AIzaSyA3vmnzLodVlnS0tIbty8tduEaKs4TF-BY&callback=initMap">
-    </script>
-
 </head>
 
 <body>
@@ -91,8 +88,24 @@
 <div class="fab-width-container container">
     {% block fab %}{% endblock %}
 </div>
-<!-- NEED TO UPDATE BELOW -->
 {% block dialogs %}
+<dialog id='import-dialog' class="mdl-dialog">
+    <h4 class="mdl-dialog__title">Select file to import...</h4>
+    <div class="mdl-dialog__content">
+        <div class="hidden current_entity_key">{{entity_key}}</div>
+        <p>Please select a file to import. The file must be a .xls or .xlsx file with a single column of student names.</p>
+        <div id="import_file_field" class="mdl-file mdl-js-file mdl-file--floating-label">
+            <input type="file" name="import_file" id="import_file">
+            <label class="mdl-file__label" for="import_file">File To Import</label>
+        </div>
+    </div>
+    <div class="mdl-dialog__actions">
+        <button type="button" class="mdl-button mdl-js-button mdl-button--raised mdl-button--colored confirm-import">Import</button>
+        <button type="button" class="mdl-button mdl-js-button mdl-button--raised close-import-list-dialog">Cancel</button>
+    </div>
+    </form>
+</dialog>
+<!-- NEED TO UPDATE BELOW -->
 <dialog id='edit-route-dialog' class="mdl-dialog">
     <h4 class="mdl-dialog__title" id="edit-route-title">Create Route</h4>
     <form id="create-route-form" action="/edit-route" method="POST">
